@@ -1,0 +1,82 @@
+<html>
+    <head>
+        <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> -->
+        <title>Something new</title>
+            <meta name="describtion" content="Тестовый сайт, использующий фреймворк django">
+    </head>
+    <body>
+        <h1>Creating my personal website</h1>
+        <hr>
+
+        {%if input is not None%}
+        <h2>Your input: {{input}}</h2>
+        {%else%}
+        <h2>You dont have input</h2>
+        {%endif%}
+
+        <p>
+            Начнём с довольно весёлых и незначительных изменений 
+            (<a href="http://htmlbook.ru/samhtml/znacheniya-atributov-tegov/adres">
+                Здесь изучаем html вёрстку
+            </a>)
+        </p>
+        <p>Как ты знаешь, ты ввёл "{{input}}"</p>
+
+        <ol>
+            <li>Превый элемента списка</li>
+            <li>Второй элемента списка</li>
+        </ol>
+
+        <dl>
+            <dt>
+                Инкапсуляция
+            </dt>
+            <dd>
+                Только попробуй назвать это сокрытием данных
+            </dd>
+        </dl>
+
+        <table border="1">
+            <tr>
+                <th>Показатель</th>
+                <th>Редис</th>
+                <th><i>Ананас</i></th>
+                <th>Гаджет</th>
+            </tr>
+            <tr>
+                <th>Количество: </th>
+                <td>10</td> 
+                <td>20</td> 
+                <td>30</td> 
+            </tr>
+        </table>
+
+
+        {% load static %}
+        <p align="center"><img src="{%static 'polls/images/meme.png'%}" alt="Meme for you" title="Meme"></p>
+
+        <input type="radio" id="1"><label for="1">Текст</label>
+
+        <ul>
+            {%for q in question_list%}
+            <li><a href="{% url 'polls:detail' q.id%}">{{q.question_text}}</a></li>
+            {%endfor%}
+        </ul>
+
+        <a href="{% url 'test' 'Cyclic link' %}">Циклическая ссылка</a> 
+
+        {%for q in question_list%}
+        <fieldset>
+            <legend align="center"><h2>{{q.question_text}}</h2></legend> 
+            <form action="{%url 'polls:vote' q.id%}" method="post">
+                {% csrf_token %}
+                {% for choice in q.choice_set.all %}
+                <input type="radio" name="choice" id="choice#{{ forloop.counter }}" value="{{choice.id}}">
+                <label for="choice#{{ forloop.counter }}">{{choice.choice_text}}</label><br>
+                {% endfor %}
+            <input type="submit" value="Vote">
+            </form>
+        </fieldset>
+        {%endfor%}
+    </body>
+</html>
